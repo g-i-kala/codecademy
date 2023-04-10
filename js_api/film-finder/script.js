@@ -1,4 +1,4 @@
-const tmdbKey = 'myAPIkey';
+const tmdbKey = '3d135325fad17668c96e1889ec28b405';
 const tmdbBaseUrl = 'https://api.themoviedb.org/3';
 const playBtn = document.getElementById('playBtn');
 
@@ -12,6 +12,7 @@ const getGenres = async () => {
     if (response.ok) {
       const jsonResponse = await response.json();
       const genres = jsonResponse.genres;
+     // console.log(genres);
       return genres;
     }
   } catch (error) {
@@ -21,14 +22,14 @@ const getGenres = async () => {
 const getMovies = async () => {
   const selectedGenre = getSelectedGenre();
   const discoverMovieEndpoint = '/discover/movie';
-  requestParams = `?api_key=${tmdbKey}&with_genres=${selectedGenre}`;
-  urlToFetch=tmdbBaseUrl+discoverMovieEndpoint+requestParams;
+  const requestParams = `?api_key=${tmdbKey}&with_genres=${selectedGenre}`;
+  const urlToFetch=tmdbBaseUrl+discoverMovieEndpoint+requestParams;
   try {
     const response = await fetch(urlToFetch);
     if(response.ok) {
       const jsonResponse = await response.json();
-      const movies = jsonsRsponse.results;
-      console.log(movies);
+      const movies = jsonResponse.results;
+     // console.log(movies);
       return movies;
     }
   }
@@ -38,16 +39,18 @@ const getMovies = async () => {
 const getMovieInfo = async (movie) => {
   const movieId = movie.id;
   const movieEndpoint = `/movie/${movieId}`;
-  const queryParams = `?api_key=${tmdbKey}`;
+  const requestParams = `?api_key=${tmdbKey}`;
   const urlToFetch = tmdbBaseUrl+ movieEndpoint+requestParams;
   try {
-    const respones = await fetch(urlToFetch);
+    const response = await fetch(urlToFetch);
     if(response.ok) {
-      movieInfo = await response.json();
+      const jsonResponse = await response.json();
+      const movieInfo = jsonResponse;
+      console.log(movieInfo);
       return movieInfo;
     }
   }
-  catch (error) {cosnole.log(error);}
+  catch (error) {console.log(error);}
 
 };
 
@@ -59,7 +62,7 @@ const showRandomMovie = async () => {
   };
 const movies = await getMovies();
 const randomMovie = getRandomMovie(movies);
-const info = getMovieInfo(randomMovie);
+const info = await getMovieInfo(randomMovie);
 displayMovie(info);
 
 };
